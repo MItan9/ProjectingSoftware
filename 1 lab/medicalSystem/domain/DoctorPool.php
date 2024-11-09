@@ -1,8 +1,20 @@
+// domain/DoctorPool.php
 <?php
 class DoctorPool
 {
+    private static $instance = null;
     private $availableDoctors = [];
     private $inUseDoctors = [];
+
+    private function __construct() {}
+
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new DoctorPool();
+        }
+        return self::$instance;
+    }
 
     public function addDoctor($doctor)
     {
@@ -29,4 +41,3 @@ class DoctorPool
     }
 }
 ?>
-

@@ -1,3 +1,4 @@
+// models/Doctor.php
 <?php
 class Doctor
 {
@@ -8,6 +9,16 @@ class Doctor
     {
         $this->name = $name;
         $this->specialty = $specialty;
+    }
+
+    public function getSpecialty()
+    {
+        return $this->specialty;
+    }
+
+    public function __toString()
+    {
+        return "Doctor: {$this->name}, Specialization: {$this->getSpecialty()}";
     }
 }
 ?>
