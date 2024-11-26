@@ -68,11 +68,13 @@ try {
     echo "Ошибка: " . $e->getMessage();
 }
 
-// Использование фабрики для создания записи на прием
+// Использование фабрики для создания записи на прием(делегировать создание объектов наследникам)
 $appointment = AppointmentFactory::createAppointment('checkup');
 echo $appointment->bookAppointment() . "\n";
 
 // Использование фабрики для создания пациента и врача
+//(интерфейс для создания семейств взаимосвязанных или взаимозависимых
+// объектов без спецификации их конкретных классов)
 $adultFactory = new AdultMedicalFactory();
 $patient = $adultFactory->createPatient();
 $doctor = $adultFactory->createDoctor();
@@ -81,7 +83,8 @@ echo "Name: {$patient->name}, Age: {$patient->age}, Medical History: {$patient->
 echo "Created Doctor:\n";
 echo "Name: {$doctor->name}, Specialty: {$doctor->specialty}\n";
 
-
+//Пул для добавления и получения врача, а потом после использования возвращение его обратно к списку доступных
+//для управления набором заранее созданных объектов, которые могут быть "выданы" и "возвращены"
 $doctorPool = DoctorPool::getInstance();
 $doctorPool->addDoctor("Dr. Wonk");
 $doctorFromPool = $doctorPool->getDoctor();

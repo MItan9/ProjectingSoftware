@@ -1,10 +1,12 @@
-// domain/DoctorPool.php
 <?php
-class DoctorPool
+require_once '../utilities/Subject.php';
+
+class DoctorPool implements Subject
 {
     private static $instance = null;
     private $availableDoctors = [];
     private $inUseDoctors = [];
+    private $observers = []; // Observers list
 
     private function __construct() {}
 
@@ -16,9 +18,30 @@ class DoctorPool
         return self::$instance;
     }
 
+    public function attach(Observer $observer)
+    {
+        $this->observers[] = $observer;
+    }
+
+    public function detach(Observer $observer)
+    {
+        $index = array_search($observer, $this->observers);
+        if ($index !== false) {
+            unset($this->observers[$index]);
+        }
+    }
+
+    public function notify($eventData)
+    {
+        foreach ($this->observers as $observer) {
+            $observer->update($eventData);
+        }
+    }
+
     public function addDoctor($doctor)
     {
         $this->availableDoctors[] = $doctor;
+        $this->notify("Doctor added: {$doctor}");
     }
 
     public function getDoctor()
@@ -28,6 +51,7 @@ class DoctorPool
         }
         $doctor = array_pop($this->availableDoctors);
         $this->inUseDoctors[] = $doctor;
+        $this->notify("Doctor assigned: {$doctor}");
         return $doctor;
     }
 
@@ -37,7 +61,9 @@ class DoctorPool
         if ($key !== false) {
             unset($this->inUseDoctors[$key]);
             $this->availableDoctors[] = $doctor;
+            $this->notify("Doctor released: {$doctor}");
         }
     }
 }
+
 ?>

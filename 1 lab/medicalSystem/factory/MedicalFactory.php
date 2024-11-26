@@ -1,6 +1,7 @@
 <?php
 
 require_once '../models/Patient.php';
+
 interface MedicalFactory
 {
     public function createPatient();
@@ -24,7 +25,7 @@ class PediatricMedicalFactory implements MedicalFactory
 {
     public function createPatient()
     {
-        return new Patient("Jane Doe", 12, "Asthma");
+        return new Patient("Jane Rock", 12, "Asthma");
     }
 
     public function createDoctor()
